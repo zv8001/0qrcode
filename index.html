@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom QR Code Generator</title>
+    <script src="qrcode.js"></script>
+    <style>
+    /* General Reset */
+    body, h1, form, input, button, footer, textarea {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Dark Mode Styles (default) */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #121212; /* Default dark mode background */
+        color: #e0e0e0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .container {
+        background-color: #1e1e1e;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        width: 90%;
+        max-width: 400px;
+        min-width: 320px; /* Lock minimum width */
+        min-height: 320px; /* Lock minimum height */
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px; /* Space between content and QR code */
+        transition: background-color 0.3s;
+    }
+
+    h1 {
+        color: #ffffff;
+        margin-bottom: 20px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    input[type="text"],
+    input[type="color"],
+    input[type="number"],
+    select,
+    textarea {
+        padding: 10px;
+        border: 1px solid #333;
+        border-radius: 4px;
+        font-size: 16px;
+        width: 100%;
+        background-color: #333;
+        color: #e0e0e0;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    button {
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    #qr-code {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1 0 auto; /* Allow the QR code container to expand */
+    }
+
+    footer {
+        background-color: #007bff;
+        color: white;
+        text-align: center;
+        padding: 5px 10px; /* Reduced padding */
+        font-size: 12px;   /* Smaller font size */
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Light Mode Styles */
+    .light-mode body {
+        background-color: #f5f5f5 !important; /* Light mode background */
+        color: #333 !important;
+    }
+
+    .light-mode .container {
+        background-color: #ffffff !important;
+    }
+
+    .light-mode h1 {
+        color: #333 !important;
+    }
+
+    .light-mode input[type="text"],
+    .light-mode input[type="color"],
+    .light-mode input[type="number"],
+    .light-mode select,
+    .light-mode textarea {
+        background-color: #ffffff !important;
+        color: #333 !important;
+        border: 1px solid #ddd !important;
+    }
+
+    .light-mode footer {
+        background-color: #007bff !important;
+        color: white !important;
+    }
+
+    .mode-toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .mode-toggle:hover {
+        background-color: #0056b3;
+    }
+
+    /* Popup Styles */
+    .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0.3s, opacity 0.3s;
+    }
+
+    .popup-overlay.show {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .popup-content {
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        width: 90%;
+        max-width: 500px;
+        background-color: #1e1e1e; /* Dark mode background for popup */
+        color: #e0e0e0; /* Dark mode text color for popup */
+    }
+
+    .light-mode .popup-content {
+        background-color: #ffffff !important; /* Light mode background for popup */
+        color: #333 !important; /* Light mode text color for popup */
+    }
+
+    .popup-content textarea {
+        height: 150px; /* Adjust as needed */
+        margin-bottom: 10px;
+        resize: none; /* Disable resizing */
+        background-color: inherit; /* Ensure textarea matches the popup's background */
+        color: inherit; /* Ensure textarea text matches the popup's text color */
+        border: 1px solid #333; /* Dark mode border for textarea */
+    }
+
+    .light-mode .popup-content textarea {
+        border: 1px solid #ddd !important; /* Light mode border for textarea */
+    }
+
+    .popup-content button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .popup-content button:hover {
+        background-color: #0056b3;
+    }
+</style>
+</head>
+
+<body>
+    <div class="popup-overlay" id="popup-overlay">
+        <div class="popup-content">
+            <h2>INFO:</h2>
+            <textarea readonly>
+This website uses qrcode.js. qrcode.js is under the MIT license.
+
+https://github.com/davidshimjs/qrcodejs?tab=MIT-1-ov-file#readme
+
+The MIT License for qrcode.js  (MIT)
+---------------------
+Copyright (c) 2012 davidshimjs
+
+Permission is hereby granted, free of charge,
+to any person obtaining a copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+            </textarea>
+            <button onclick="acceptAgreement()">I Agree</button>
+        </div>
+    </div>
+
+    <button class="mode-toggle" onclick="toggleMode()">Switch to Light Mode</button>
+    <div class="container">
+        <h1>Custom QR Code Generator</h1>
+        <form id="qr-form">
+            <input type="text" id="qr-input" placeholder="Enter your data" required>
+            <input type="color" id="qr-color" value="#000000" title="Choose QR code color">
+            <select id="qr-size" onchange="toggleCustomSize()">
+                <option value="128">Small (128x128)</option>
+                <option value="256" selected>Medium (256x256)</option>
+                <option value="512">Large (512x512)</option>
+                <option value="custom">Custom Size</option>
+            </select>
+            <div id="custom-size-fields" style="display: none; gap: 10px;">
+                <input type="number" id="qr-width" placeholder="Width" min="50" max="1000">
+                <input type="number" id="qr-height" placeholder="Height" min="50" max="1000">
+            </div>
+            <select id="qr-error">
+                <option value="L">Low (L) - 7% error correction</option>
+                <option value="M" selected>Medium (M) - 15% error correction</option>
+                <option value="Q">Quality (Q) - 25% error correction</option>
+                <option value="H">High (H) - 30% error correction</option>
+            </select>
+            <select id="qr-type">
+                <option value="text">Text</option>
+                <option value="phone">Phone Number</option>
+                <option value="email">Email</option>
+                <option value="link">Link</option>
+                <option value="plaintext">Plaintext</option>
+                <option value="contact">Contact</option>
+            </select>
+            <button type="button" onclick="generateQR()">Generate QR Code</button>
+        </form>
+        <div id="qr-code"></div>
+    </div>
+    <footer>
+        <p>&copy; 2024 zv800. All rights reserved.</p>
+    </footer>
+    <script>
+        function toggleCustomSize() {
+            const qrSize = document.getElementById('qr-size').value;
+            const customSizeFields = document.getElementById('custom-size-fields');
+            if (qrSize === 'custom') {
+                customSizeFields.style.display = 'flex';
+            } else {
+                customSizeFields.style.display = 'none';
+            }
+        }
+
+        function generateQR() {
+            const input = document.getElementById('qr-input').value;
+            const color = document.getElementById('qr-color').value;
+            const qrSize = document.getElementById('qr-size').value;
+            const width = qrSize === 'custom' ? parseInt(document.getElementById('qr-width').value) : parseInt(qrSize);
+            const height = qrSize === 'custom' ? parseInt(document.getElementById('qr-height').value) : parseInt(qrSize);
+            const errorCorrectionLevel = document.getElementById('qr-error').value;
+            const qrCodeContainer = document.getElementById('qr-code');
+            const qrType = document.getElementById('qr-type').value;
+
+            // Format input based on type
+            let formattedInput = input;
+            switch (qrType) {
+                case 'phone':
+                    formattedInput = `tel:${input}`;
+                    break;
+                case 'email':
+                    formattedInput = `mailto:${input}`;
+                    break;
+                case 'link':
+                    formattedInput = input.startsWith('http') ? input : `http://${input}`;
+                    break;
+                case 'contact':
+                    formattedInput = `BEGIN:VCARD\nVERSION:3.0\nFN:${input}\nEND:VCARD`;
+                    break;
+                default:
+                    formattedInput = input;
+                    break;
+            }
+
+            // Clear any previous QR code
+            qrCodeContainer.innerHTML = '';
+
+            if (formattedInput.trim()) {
+                // Generate the QR code with custom options
+                new QRCode(qrCodeContainer, {
+                    text: formattedInput,
+                    width: width,
+                    height: height,
+                    colorDark: color,
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel[errorCorrectionLevel]
+                });
+            }
+        }
+
+        function toggleMode() {
+            const body = document.body;
+            const modeToggleBtn = document.querySelector('.mode-toggle');
+            body.classList.toggle('light-mode');
+            modeToggleBtn.textContent = body.classList.contains('light-mode') ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+        }
+
+        function acceptAgreement() {
+            // Directly accept the agreement without checking for textbox value
+            document.getElementById('popup-overlay').classList.remove('show');
+           // localStorage.setItem('L_agreementAccepted', 'true'); REMOVE IF YOU WANT TO ONLY SHOW ONECE
+        }
+
+        function checkAgreement() {
+            if (localStorage.getItem('L_agreementAccepted') !== 'true') {
+                document.getElementById('popup-overlay').classList.add('show');
+            }
+        }
+
+        // Check for agreement on page load
+        document.addEventListener('DOMContentLoaded', checkAgreement);
+    </script>
+</body>
+
+</html>
