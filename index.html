@@ -7,215 +7,215 @@
     <title>0qrcode</title>
     <script src="qrcode.js"></script>
     <style>
-    /* General Reset */
-    body, h1, form, input, button, footer, textarea {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+        /* General Reset */
+        body, h1, form, input, button, footer, textarea {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* Dark Mode Styles (default) */
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #121212; /* Default dark mode background */
-        color: #e0e0e0;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        transition: background-color 0.3s, color 0.3s;
-    }
+        /* Dark Mode Styles (default) */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212; /* Default dark mode background */
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
 
-    .container {
-        background-color: #1e1e1e;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        text-align: center;
-        width: 90%;
-        max-width: 400px;
-        min-width: 320px; /* Lock minimum width */
-        min-height: 320px; /* Lock minimum height */
-        margin-bottom: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px; /* Space between content and QR code */
-        transition: background-color 0.3s;
-    }
+        .container {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            min-width: 320px; /* Lock minimum width */
+            min-height: 320px; /* Lock minimum height */
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px; /* Space between content and QR code */
+            transition: background-color 0.3s;
+        }
 
-    h1 {
-        color: #ffffff;
-        margin-bottom: 20px;
-    }
+        h1 {
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
 
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-    input[type="text"],
-    input[type="color"],
-    input[type="number"],
-    select,
-    textarea {
-        padding: 10px;
-        border: 1px solid #333;
-        border-radius: 4px;
-        font-size: 16px;
-        width: 100%;
-        background-color: #333;
-        color: #e0e0e0;
-        transition: background-color 0.3s, color 0.3s;
-    }
+        input[type="text"],
+        input[type="color"],
+        input[type="number"],
+        select,
+        textarea {
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 100%;
+            background-color: #333;
+            color: #e0e0e0;
+            transition: background-color 0.3s, color 0.3s;
+        }
 
-    button {
-        padding: 10px;
-        border: none;
-        border-radius: 4px;
-        background-color: #007bff;
-        color: white;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-    button:hover {
-        background-color: #0056b3;
-    }
+        button:hover {
+            background-color: #0056b3;
+        }
 
-    #qr-code {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: 1 0 auto; /* Allow the QR code container to expand */
-    }
+        #qr-code {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1 0 auto; /* Allow the QR code container to expand */
+        }
 
-    footer {
-        background-color: #007bff;
-        color: white;
-        text-align: center;
-        padding: 5px 10px; /* Reduced padding */
-        font-size: 12px;   /* Smaller font size */
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        transition: background-color 0.3s, color 0.3s;
-    }
+        footer {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 5px 10px; /* Reduced padding */
+            font-size: 12px;   /* Smaller font size */
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
 
-    /* Light Mode Styles */
-    .light-mode body {
-        background-color: #f5f5f5 !important; /* Light mode background */
-        color: #333 !important;
-    }
+        /* Light Mode Styles */
+        .light-mode body {
+            background-color: #f5f5f5 !important; /* Light mode background */
+            color: #333 !important;
+        }
 
-    .light-mode .container {
-        background-color: #ffffff !important;
-    }
+        .light-mode .container {
+            background-color: #ffffff !important;
+        }
 
-    .light-mode h1 {
-        color: #333 !important;
-    }
+        .light-mode h1 {
+            color: #333 !important;
+        }
 
-    .light-mode input[type="text"],
-    .light-mode input[type="color"],
-    .light-mode input[type="number"],
-    .light-mode select,
-    .light-mode textarea {
-        background-color: #ffffff !important;
-        color: #333 !important;
-        border: 1px solid #ddd !important;
-    }
+        .light-mode input[type="text"],
+        .light-mode input[type="color"],
+        .light-mode input[type="number"],
+        .light-mode select,
+        .light-mode textarea {
+            background-color: #ffffff !important;
+            color: #333 !important;
+            border: 1px solid #ddd !important;
+        }
 
-    .light-mode footer {
-        background-color: #007bff !important;
-        color: white !important;
-    }
+        .light-mode footer {
+            background-color: #007bff !important;
+            color: white !important;
+        }
 
-    .mode-toggle {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
+        .mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-    .mode-toggle:hover {
-        background-color: #0056b3;
-    }
+        .mode-toggle:hover {
+            background-color: #0056b3;
+        }
 
-    /* Popup Styles */
-    .popup-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-        visibility: hidden;
-        opacity: 0;
-        transition: visibility 0.3s, opacity 0.3s;
-    }
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0.3s, opacity 0.3s;
+        }
 
-    .popup-overlay.show {
-        visibility: visible;
-        opacity: 1;
-    }
+        .popup-overlay.show {
+            visibility: visible;
+            opacity: 1;
+        }
 
-    .popup-content {
-        padding: 20px;
-        border-radius: 8px;
-        text-align: center;
-        width: 90%;
-        max-width: 500px;
-        background-color: #1e1e1e; /* Dark mode background for popup */
-        color: #e0e0e0; /* Dark mode text color for popup */
-    }
+        .popup-content {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            background-color: #1e1e1e; /* Dark mode background for popup */
+            color: #e0e0e0; /* Dark mode text color for popup */
+        }
 
-    .light-mode .popup-content {
-        background-color: #ffffff !important; /* Light mode background for popup */
-        color: #333 !important; /* Light mode text color for popup */
-    }
+        .light-mode .popup-content {
+            background-color: #ffffff !important; /* Light mode background for popup */
+            color: #333 !important; /* Light mode text color for popup */
+        }
 
-    .popup-content textarea {
-        height: 150px; /* Adjust as needed */
-        margin-bottom: 10px;
-        resize: none; /* Disable resizing */
-        background-color: inherit; /* Ensure textarea matches the popup's background */
-        color: inherit; /* Ensure textarea text matches the popup's text color */
-        border: 1px solid #333; /* Dark mode border for textarea */
-    }
+        .popup-content textarea {
+            height: 150px; /* Adjust as needed */
+            margin-bottom: 10px;
+            resize: none; /* Disable resizing */
+            background-color: inherit; /* Ensure textarea matches the popup's background */
+            color: inherit; /* Ensure textarea text matches the popup's text color */
+            border: 1px solid #333; /* Dark mode border for textarea */
+        }
 
-    .light-mode .popup-content textarea {
-        border: 1px solid #ddd !important; /* Light mode border for textarea */
-    }
+        .light-mode .popup-content textarea {
+            border: 1px solid #ddd !important; /* Light mode border for textarea */
+        }
 
-    .popup-content button {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-top: 10px;
-    }
+        .popup-content button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
 
-    .popup-content button:hover {
-        background-color: #0056b3;
-    }
-</style>
+        .popup-content button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
@@ -277,6 +277,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 <option value="contact">Contact</option>
             </select>
             <button type="button" onclick="generateQR()">Generate QR Code</button>
+            <button type="button" onclick="saveQRCode()">Save QR Code</button>
         </form>
         <div id="qr-code"></div>
     </div>
@@ -340,6 +341,23 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             }
         }
 
+        function saveQRCode() {
+            const qrCodeContainer = document.getElementById('qr-code');
+            const canvas = qrCodeContainer.querySelector('canvas'); // Get the canvas element inside qr-code container
+            
+            if (canvas) {
+                const dataURL = canvas.toDataURL('image/png'); // Get the data URL of the canvas image
+                const link = document.createElement('a'); // Create a temporary link element
+                link.href = dataURL;
+                link.download = 'qrcode.png'; // Set the download filename
+                document.body.appendChild(link); // Append the link to the body
+                link.click(); // Trigger the download
+                document.body.removeChild(link); // Remove the link from the body
+            } else {
+                alert('Please generate a QR code first.');
+            }
+        }
+
         function toggleMode() {
             const body = document.body;
             const modeToggleBtn = document.querySelector('.mode-toggle');
@@ -350,7 +368,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         function acceptAgreement() {
             // Directly accept the agreement without checking for textbox value
             document.getElementById('popup-overlay').classList.remove('show');
-           // localStorage.setItem('L_agreementAccepted', 'true'); REMOVE IF YOU WANT TO ONLY SHOW ONECE
+            // localStorage.setItem('L_agreementAccepted', 'true'); REMOVE IF YOU WANT TO ONLY SHOW ONCE
         }
 
         function checkAgreement() {
